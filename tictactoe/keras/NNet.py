@@ -1,16 +1,13 @@
-import argparse
 import os
-import shutil
-import time
-import random
-import numpy as np
-import math
 import sys
-sys.path.append('..')
-from utils import *
-from NeuralNet import NeuralNet
+import time
 
-import argparse
+import numpy as np
+
+sys.path.append('..')
+from NeuralNet import NeuralNet
+from utils import *
+
 from .TicTacToeNNet import TicTacToeNNet as onnet
 
 """
@@ -63,7 +60,7 @@ class NNetWrapper(NeuralNet):
         #print('PREDICTION TIME TAKEN : {0:03f}'.format(time.time()-start))
         return pi[0], v[0]
 
-    def save_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
+    def save_checkpoint(self, folder='checkpoint', filename='checkpoint.h5'):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(folder):
             print("Checkpoint Directory does not exist! Making directory {}".format(folder))
@@ -72,8 +69,7 @@ class NNetWrapper(NeuralNet):
             print("Checkpoint Directory exists! ")
         self.nnet.model.save_weights(filepath)
 
-    def load_checkpoint(self, folder='checkpoint', filename='checkpoint.pth.tar'):
-        # https://github.com/pytorch/examples/blob/master/imagenet/main.py#L98
+    def load_checkpoint(self, folder='checkpoint', filename='checkpoint.h5'):
         filepath = os.path.join(folder, filename)
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"No model in path '{filepath}'")
