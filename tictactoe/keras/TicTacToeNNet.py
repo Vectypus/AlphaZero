@@ -1,6 +1,6 @@
 from keras.models import Model
-from keras.layers import (BatchNormalization, Conv2D, Dense, Dropout, Flatten,
-                          Input, Reshape)
+from keras.layers import (Activation, BatchNormalization, Conv2D, Dense,
+                          Dropout, Flatten, Input, Reshape)
 from tensorflow.keras.optimizers import Adam
 
 
@@ -26,25 +26,41 @@ class TicTacToeNNet():
         self.input_boards = Input(shape=(self.board_x, self.board_y))            # batch_size * 3 * 3
 
         x_image = Reshape((self.board_x, self.board_y, 1))(self.input_boards)    # batch_size * 3 * 3 * 1
-        conv1 = BatchNormalization(axis=3)(                                      # batch_size * 3 * 3 * num_channels
-            Conv2D(args.num_channels, 3, padding="same", activation="relu")(x_image)
+        conv1 = Activation("relu")(
+            BatchNormalization(axis=3)(                                          # batch_size * 3 * 3 * num_channels
+                Conv2D(args.num_channels, 3, padding="same")(x_image)
+            )
         )
-        conv2 = BatchNormalization(axis=3)(                                      # batch_size * 3 * 3 * num_channels
-            Conv2D(args.num_channels, 3, padding="same", activation="relu")(conv1)
+        conv2 = Activation("relu")(
+            BatchNormalization(axis=3)(                                          # batch_size * 3 * 3 * num_channels
+                Conv2D(args.num_channels, 3, padding="same")(conv1)
+            )
         )
-        conv3 = BatchNormalization(axis=3)(                                      # batch_size * 3 * 3 * num_channels
-            Conv2D(args.num_channels, 3, padding="same", activation="relu")(conv2)
+        conv3 = Activation("relu")(
+            BatchNormalization(axis=3)(                                          # batch_size * 3 * 3 * num_channels
+                Conv2D(args.num_channels, 3, padding="same")(conv2)
+            )
         )
-        conv4 = BatchNormalization(axis=3)(                                      # batch_size * 1 * 1 * num_channels
-            Conv2D(args.num_channels, 3, padding="valid", activation="relu")(conv3)
+        conv4 = Activation("relu")(
+            BatchNormalization(axis=3)(                                          # batch_size * 1 * 1 * num_channels
+                Conv2D(args.num_channels, 3, padding="valid")(conv3)
+            )
         )
         flat = Flatten()(conv4)                                                  # batch_size * num_channels
-        fc1 = Dropout(args.dropout)(BatchNormalization(axis=1)(                  # batch_size * 1024
-            Dense(1024, activation="relu")(flat)
-        ))
-        fc2 = Dropout(args.dropout)(BatchNormalization(axis=1)(                  # batch_size * 512
-            Dense(512, activation="relu")(fc1)
-        ))
+        fc1 = Dropout(args.dropout)(                                             # batch_size * 1024
+            Activation("relu")(
+                BatchNormalization(axis=1)(
+                    Dense(1024)(flat)
+                )
+            )
+        )
+        fc2 = Dropout(args.dropout)(                                             # batch_size * 512
+            Activation("relu")(
+                BatchNormalization(axis=1)(
+                    Dense(512)(fc1)
+                )
+            )
+        )
 
         self.pi = Dense(self.action_size, activation="softmax", name="pi")(fc2)  # batch_size * 10
         self.v = Dense(1, activation="tanh", name='v')(fc2)                      # batch_size * 1
