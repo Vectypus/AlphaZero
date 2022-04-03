@@ -11,7 +11,7 @@ class Connect4Game(Game):
     Connect4 Game class implementing the alpha-zero-general Game interface.
     """
 
-    def __init__(self, height=None, width=None, win_length=None, np_pieces=None):
+    def __init__(self, height=6, width=7, win_length=4, np_pieces=None):
         Game.__init__(self)
         self._base_board = Board(height, width, win_length, np_pieces)
 

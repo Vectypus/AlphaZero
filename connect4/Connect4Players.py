@@ -6,11 +6,13 @@ class RandomPlayer():
         self.game = game
 
     def play(self, board):
-        a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
-        while valids[a] != 1:
-            a = np.random.randint(self.game.getActionSize())
-        return a
+
+        action = np.random.randint(self.game.getActionSize())
+        while not valids[action]:
+            action = np.random.randint(self.game.getActionSize())
+
+        return action
 
 
 class HumanConnect4Player():
@@ -18,14 +20,18 @@ class HumanConnect4Player():
         self.game = game
 
     def play(self, board):
-        valid_moves = self.game.getValidMoves(board, 1)
-        print('\nMoves:', [i for (i, valid) in enumerate(valid_moves) if valid])
+        valids = self.game.getValidMoves(board, 1)
+        print('\nMoves:', [i for (i, valid) in enumerate(valids) if valid])
 
         while True:
-            move = int(input())
-            if valid_moves[move]: break
-            else: print('Invalid move')
-        return move
+            action = int(input("Move: "))
+
+            if valids[action]:
+                break
+            else:
+                print("Invalid move")
+
+        return action
 
 
 class OneStepLookaheadConnect4Player():
@@ -41,7 +47,8 @@ class OneStepLookaheadConnect4Player():
         fallback_move_set = set()
         stop_loss_move_set = set()
         for move, valid in enumerate(valid_moves):
-            if not valid: continue
+            if not valid:
+                continue
             if self.player_num == self.game.getGameEnded(*self.game.getNextState(board, self.player_num, move)):
                 win_move_set.add(move)
             if -self.player_num == self.game.getGameEnded(*self.game.getNextState(board, -self.player_num, move)):
@@ -51,14 +58,17 @@ class OneStepLookaheadConnect4Player():
 
         if len(win_move_set) > 0:
             ret_move = np.random.choice(list(win_move_set))
-            if self.verbose: print('Playing winning action %s from %s' % (ret_move, win_move_set))
+            if self.verbose:
+                print('Playing winning action %s from %s' % (ret_move, win_move_set))
         elif len(stop_loss_move_set) > 0:
             ret_move = np.random.choice(list(stop_loss_move_set))
-            if self.verbose: print('Playing loss stopping action %s from %s' % (ret_move, stop_loss_move_set))
+            if self.verbose:
+                print('Playing loss stopping action %s from %s' % (ret_move, stop_loss_move_set))
         elif len(fallback_move_set) > 0:
             ret_move = np.random.choice(list(fallback_move_set))
-            if self.verbose: print('Playing random action %s from %s' % (ret_move, fallback_move_set))
+            if self.verbose:
+                print('Playing random action %s from %s' % (ret_move, fallback_move_set))
         else:
-            raise Exception('No valid moves remaining: %s' % game.stringRepresentation(board))
+            raise Exception('No valid moves remaining: %s' % self.game.stringRepresentation(board))
 
         return ret_move

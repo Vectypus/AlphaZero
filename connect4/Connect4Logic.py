@@ -1,10 +1,6 @@
 from collections import namedtuple
 import numpy as np
 
-DEFAULT_HEIGHT = 6
-DEFAULT_WIDTH = 7
-DEFAULT_WIN_LENGTH = 4
-
 WinState = namedtuple('WinState', 'is_ended winner')
 
 
@@ -13,11 +9,11 @@ class Board():
     Connect4 Board.
     """
 
-    def __init__(self, height=None, width=None, win_length=None, np_pieces=None):
+    def __init__(self, height=6, width=7, win_length=4, np_pieces=None):
         "Set up initial board configuration."
-        self.height = height or DEFAULT_HEIGHT
-        self.width = width or DEFAULT_WIDTH
-        self.win_length = win_length or DEFAULT_WIN_LENGTH
+        self.height = height
+        self.width = width
+        self.win_length = win_length
 
         if np_pieces is None:
             self.np_pieces = np.zeros([self.height, self.width], dtype=np.int)
