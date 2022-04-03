@@ -64,7 +64,6 @@ class Connect4NNet():
         # game params
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
-        self.args = args
 
         # Neural Net
         # Inputs

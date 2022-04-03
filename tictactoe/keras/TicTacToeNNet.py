@@ -20,7 +20,6 @@ class TicTacToeNNet():
         # Game parameters
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
-        self.args = args
 
         # Neural network model
         self.input_boards = Input(shape=(self.board_x, self.board_y))            # batch_size * 3 * 3
