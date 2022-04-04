@@ -64,7 +64,19 @@ class Connect4Game(Game):
 
     @staticmethod
     def display(board):
-        print(" -----------------------")
-        print(' '.join(map(str, range(len(board[0])))))
-        print(board)
-        print(" -----------------------")
+        for x in range(board.shape[0]):
+            print(' ', end='')
+            for y in range(board.shape[1]):
+                piece = board[x][y]
+                if piece == 1:
+                    print('0', end=' ')
+                elif piece == -1:
+                    print('X', end=' ')
+                else:
+                    print('.', end=' ')
+
+                if y == board.shape[1] - 1:
+                    print()
+
+            if x == board.shape[0] - 1:
+                print()
