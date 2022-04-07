@@ -63,7 +63,7 @@ def policy_head(input):
 
 class Connect4NNet():
     def __init__(self, game, args):
-        # game params
+        # Game parameters
         self.board_x, self.board_y = game.getBoardSize()
         self.action_size = game.getActionSize()
 
