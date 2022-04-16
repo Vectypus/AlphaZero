@@ -2,3 +2,4 @@ coloredlogs
 numpy
 tqdm
 tensorflow
+click
